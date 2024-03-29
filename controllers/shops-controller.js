@@ -21,7 +21,7 @@ const findOne = async (req, res) => {
         }
 
         const shopData = shopFound[0];
-        res,json(shopData);
+        res.json(shopData);
     } catch (error) {
         res.status(500).json({
             message: `Unable to retrieve shop data with id ${req.params.id}`,
