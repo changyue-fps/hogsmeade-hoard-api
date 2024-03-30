@@ -9,19 +9,19 @@ exports.seed = async function (knex) {
       {
         id: 1,
         products_id: 1,
-        image_url: "/products/chocolte-frogs-01.png",
+        image_url: "/products/chocolate-frogs-01.png",
         main: true 
       },
       {
         id: 2,
         products_id: 1,
-        image_url: "/products/chocolte-frogs-02.png",
+        image_url: "/products/chocolate-frogs-02.png",
         main: false 
       },
       {
         id: 3,
         products_id: 1,
-        image_url: "/products/chocolte-frogs-03.png",
+        image_url: "/products/chocolate-frogs-03.png",
         main: false 
       },
       {
