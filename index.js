@@ -4,6 +4,9 @@ const app = express();
 const cors = require("cors");
 const shopRoutes = require("./routes/shops");
 const productRoutes = require("./routes/products");
+const loginRoutes = require("./routes/login");
+const signupRoutes = require("./routes/signup");
+const userRoutes = require("./routes/user");
 
 app.use(express.static("public"));
 
@@ -18,6 +21,9 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/shops", shopRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/login", loginRoutes);
+app.use("/api/signup", signupRoutes);
+app.use("/api/user", userRoutes);
 
 
 app.listen(PORT, function () {
