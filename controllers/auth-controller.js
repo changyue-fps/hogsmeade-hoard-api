@@ -55,13 +55,17 @@ const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 8);
 
-    const newUser = await knex("users").insert({
+    const [newUserId] = await knex("users").insert({
       user_name,
       email,
       password_encrypted: hashedPassword,
+    }, 'id');
+
+    const token = jwt.sign({ id: newUserId }, process.env.JWT_SECRET, {
+      expiresIn: '24h' 
     });
 
-    res.status(201).send("User registered");
+    res.status(201).json({ message: "User registered", token });
   } catch (error) {
     console.error("Registration Error:", error);
     res.status(500).send("Server error during registration");
@@ -94,12 +98,6 @@ const addToLike = async (req, res) => {
       .first();
 
     if (!existingItem) {
-      //   // Update quantity if item exists
-      //   await knex("likes")
-      //     .where({ id: existingItem.id })
-      //     .update({ quantity: knex.raw("?? + ?", ["quantity", quantity]) });
-      // } else {
-      // Insert new item if it doesn't exist
       await knex("likes").insert({
         user_id: userId,
         product_id: productId,
@@ -112,6 +110,31 @@ const addToLike = async (req, res) => {
     res.status(500).send("Error adding product to likes");
   }
 };
+
+const deleteLike = async (req, res) => {
+  const productId = req.params.id;
+  
+  console.log(productId);
+  const userId = req.user.id;
+  console.log(userId);
+  try {
+    const deleted = await knex('likes')
+      .where({
+        'user_id': userId,
+        'product_id': productId,
+      })
+      .del();
+
+    if (deleted) {
+      return res.status(200).json({ message: 'Like deleted successfully' });
+    } else {
+      return res.status(404).json({ message: 'Like not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting like:', error);
+    res.status(500).send('Internal server error');
+  }
+}
 
 const getProfile = async (req, res) => {
   const userId = req.user.id;
@@ -139,4 +162,5 @@ module.exports = {
   signup,
   addToLike,
   getProfile,
+  deleteLike,
 };
